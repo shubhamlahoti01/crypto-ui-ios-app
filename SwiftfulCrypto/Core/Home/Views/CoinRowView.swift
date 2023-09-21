@@ -8,21 +8,26 @@
 import SwiftUI
 
 struct CoinRowView: View {
+    @EnvironmentObject private var vm: HomeViewModel
     let coin: CoinModel
     let showHoldingsColumn: Bool
-    @State private var imageName: String = "star"
+    
+    
     var body: some View {
         HStack(spacing: 0){
             leftColumn
-            Spacer()
+//            coin.fav == true ? "star.fill" : "star"
+            Image(systemName: coin.fav ? "star.fill" : "star")
+                    .padding(.horizontal, 10)
+                    .onTapGesture {
+                        vm.toggleFavorite(for: coin)
+                    }
             if(showHoldingsColumn){
                 centerColumn
-            } else {
-                Image(systemName: imageName)
-                    .onTapGesture {
-                        imageName = imageName=="star" ? "star.fill" : "star"
-                    }
             }
+            
+            
+            Spacer()
             rightColumn
         }
         .font(.subheadline)
