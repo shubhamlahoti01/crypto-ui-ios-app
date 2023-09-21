@@ -10,12 +10,18 @@ import SwiftUI
 struct CoinRowView: View {
     let coin: CoinModel
     let showHoldingsColumn: Bool
+    @State private var imageName: String = "star"
     var body: some View {
         HStack(spacing: 0){
             leftColumn
             Spacer()
             if(showHoldingsColumn){
                 centerColumn
+            } else {
+                Image(systemName: imageName)
+                    .onTapGesture {
+                        imageName = imageName=="star" ? "star.fill" : "star"
+                    }
             }
             rightColumn
         }
@@ -26,7 +32,7 @@ struct CoinRowView: View {
 struct CoinRowView_Previews: PreviewProvider {
     static var previews: some View {
         Group{
-            CoinRowView(coin:dev.coin, showHoldingsColumn: true).previewLayout(.sizeThatFits)
+            CoinRowView(coin:dev.coin, showHoldingsColumn: false).previewLayout(.sizeThatFits)
             
 //            CoinRowView(coin:dev.coin, showHoldingsColumn: true).previewLayout(.sizeThatFits)
 //                .preferredColorScheme(.dark)

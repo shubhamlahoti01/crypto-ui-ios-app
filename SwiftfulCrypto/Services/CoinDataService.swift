@@ -16,8 +16,10 @@ class CoinDataService {
     init(){
         getCoins()
     }
+//    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=true&price_change_percentage=24h"
+    
     private func getCoins(){
-        guard let url = URL(string: "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h") else { return }
+        guard let url = URL(string: "https://shubhamlahoti01.github.io/starwars-json-api/crypto.json") else { return }
         coinSubscription = NetworkingManager.download(url: url)
             .decode(type: [CoinModel].self , decoder: JSONDecoder())
             .sink(receiveCompletion: NetworkingManager.handleCompletion, receiveValue:{ [weak self] (returnedCoins) in
