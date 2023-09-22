@@ -8,40 +8,54 @@
 import SwiftUI
 
 struct CoinRowView: View {
-    @EnvironmentObject private var vm: HomeViewModel
+    @ObservedObject var vm: HomeViewModel
     let coin: CoinModel
     let showHoldingsColumn: Bool
-    
+    @State var showAlert: Bool = false
     
     var body: some View {
-        HStack(spacing: 0){
-            leftColumn
-//            coin.fav == true ? "star.fill" : "star"
-            Image(systemName: coin.fav ? "star.fill" : "star")
+        
+            HStack(spacing: 0){
+                leftColumn
+                //            coin.fav == true ? "star.fill" : "star"
+                Image(systemName: coin.fav ? "star.fill" : "star")
                     .padding(.horizontal, 10)
                     .onTapGesture {
-                        vm.toggleFavorite(for: coin)
+                        showAlert.toggle()
+//                        vm.toggleFavorite(for: coin)
+                    }.alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text(coin.fav ? "Remove to Favorites" : "Add from Favorites"),
+                            primaryButton: .destructive(Text("Cancel")),
+                            secondaryButton: .default(
+                                Text(coin.fav ? "Remove": "Add"),
+                                action: {
+                                    vm.toggleFavorite(for: coin)
+                                }
+                            )
+                        )
                     }
-            if(showHoldingsColumn){
-                centerColumn
+                
+                if(showHoldingsColumn){
+                    centerColumn
+                }
+
+
+                Spacer()
+                rightColumn
             }
+            .font(.subheadline)
             
-            
-            Spacer()
-            rightColumn
-        }
-        .font(.subheadline)
+        
     }
 }
 
 struct CoinRowView_Previews: PreviewProvider {
     static var previews: some View {
-        Group{
-            CoinRowView(coin:dev.coin, showHoldingsColumn: false).previewLayout(.sizeThatFits)
-            
+        
+            CoinRowView(vm:dev.homeVM, coin: dev.coin, showHoldingsColumn: false).previewLayout(.sizeThatFits)
 //            CoinRowView(coin:dev.coin, showHoldingsColumn: true).previewLayout(.sizeThatFits)
 //                .preferredColorScheme(.dark)
-        }
     }
 }
 
